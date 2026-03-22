@@ -1,0 +1,1289 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Hub</title>
+<!-- Favicon SVG as a link -->
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <circle cx="16" cy="16" r="14" fill="%231E90FF"/>
+  <text x="16" y="21" font-size="12" font-family="Verdana" font-weight="bold" text-anchor="middle" fill="white">AI</text>
+</svg>'>
+<style>
+/* ===== BODY ===== */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #111 0%, #222 100%);
+  color: #fff;
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+/* ===== NAVBAR ===== */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, #1c1c1c, #2a2a2a);
+  background-size: 400% 400%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+  border-bottom: 2px solid #333;
+  backdrop-filter: blur(6px);
+  animation: navGradientMove 15s linear infinite;
+  transition: all 0.4s ease;
+}
+
+@keyframes navGradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+nav:hover {
+  box-shadow: 0 6px 30px rgba(30,144,255,0.4), 0 0 15px rgba(255,105,180,0.3);
+  transform: scale(1.01);
+}
+
+nav > div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ===== LOGO + NAME ===== */
+nav h1 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  cursor: default;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+nav h1 span {
+  background: linear-gradient(270deg, #1e90ff, #8a2be2, #00ced1, #ff69b4, #1e90ff);
+  background-size: 500% 500%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: textGradient 6s ease infinite, textGlow 4s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+@keyframes textGlow {
+  0%,100% { text-shadow: 0 0 4px #1e90ff, 0 0 6px #8a2be2; }
+  50% { text-shadow: 0 0 6px #00ced1, 0 0 10px #ff69b4; }
+}
+
+nav h1:hover span {
+  animation-play-state: paused;
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 6px #1e90ff) drop-shadow(0 0 5px #ff69b4);
+}
+
+nav h1 svg {
+  width: 40px;
+  height: 40px;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  vertical-align: middle;
+}
+
+nav h1:hover svg {
+  transform: rotate(3deg) scale(1.08);
+  filter: drop-shadow(0 0 5px #1e90ff) drop-shadow(0 0 5px #ff69b4);
+}
+
+/* ===== SEARCH BAR ===== */
+nav .search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+nav .search-container input[type="search"] {
+  padding: 0.6rem 2.5rem 0.6rem 1rem;
+  border-radius: 12px;
+  border: 2px solid #444;
+  outline: none;
+  width: 240px;
+  background: #1e1e1e;
+  color: #fff;
+  font-size: 0.95rem;
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+  transition: all 0.4s ease;
+}
+
+nav .search-container input[type="search"]:focus {
+  box-shadow: 0 0 14px rgba(30,144,255,0.5), 0 0 8px rgba(255,105,180,0.3);
+  background: #262626;
+  transform: scale(1.03);
+}
+
+nav .search-container input[type="search"]::placeholder {
+  color: #aaa;
+}
+
+nav .search-container label {
+  position: absolute;
+  left: 2.5rem;
+  font-size: 0.95rem;
+  color: #888;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+nav .search-container input[type="search"]:focus ~ label,
+nav .search-container input[type="search"]:not(:placeholder-shown) ~ label {
+  display: none;
+}
+
+nav .search-container span.icon {
+  position: absolute;
+  left: 0.8rem;
+  font-size: 1rem;
+  color: #888;
+  pointer-events: none;
+  transition: color 0.3s;
+  z-index: 2;
+}
+
+nav .search-container input[type="search"]:focus ~ span.icon {
+  color: #1E90FF;
+}
+
+nav .search-container span.scan {
+  position: absolute;
+  right: 0.8rem;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #888;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ===== FILTERS & SORT ===== */
+nav select, #sortRatingsBtn {
+  padding: 0.55rem 0.8rem;
+  border-radius: 10px;
+  border: 2px solid #444;
+  outline: none;
+  background: #2a2a2a;
+  color: #fff;
+  margin-left: 1rem;
+  cursor: pointer;
+  font-size: 0.95rem;
+  box-shadow: 0 0 4px rgba(0,0,0,0.3);
+  transition: all 0.3s ease, border 0.3s ease, background 0.3s ease;
+}
+
+nav select:hover, #sortRatingsBtn:hover {
+  border: 2px solid #ff69b4;
+  background: linear-gradient(135deg, #1e90ff, #ff69b4);
+  transform: scale(1.06) rotateZ(0.5deg);
+  box-shadow: 0 0 12px rgba(30,144,255,0.5), 0 0 10px rgba(255,105,180,0.4);
+}
+
+nav select option {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+/* ===== PRICING BADGES ===== */
+.pricing-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0.3rem 0.6rem;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  z-index: 3;
+}
+
+.pricing-free { background: #22c55e; color: #fff; }
+.pricing-trial { background: #8d1df7; color: #fff; }
+.pricing-paid { background: #ef4444; color: #fff; }
+.pricing-pay-per-use { background: #f59e0b; color: #fff; }
+
+/* ===== CONTAINER GRID ===== */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+  gap: 20px;
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #111 0%, #1c1c1c 100%);
+  transition: background 0.5s ease;
+}
+
+/* ===== AI CARD ===== */
+.ai-card {
+  position: relative;
+  background: #222;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+}
+
+.ai-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 22px rgba(255,255,255,0.2);
+  background: linear-gradient(135deg, #ff6ec7, #1e90ff, #00ced1);
+  background-size: 300% 300%;
+  animation: gradientMove 5s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.ai-card h3 {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  color: #fff;
+  position: relative;
+  z-index: 2;
+}
+
+.ai-card-description {
+  font-size: 0.85rem;
+  color: #ccc;
+  margin: 0.5rem 0 0.8rem 0;
+  line-height: 1.4;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.ai-card:hover .ai-card-description {
+  opacity: 1;
+  max-height: 100px;
+}
+
+/* ===== STAR ORBITS ===== */
+.orbit-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.35s ease;
+  will-change: opacity;
+}
+
+.ai-card:hover .orbit-container {
+  opacity: 0;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  animation: twinkle 2s ease-in-out infinite, float 6s ease-in-out infinite;
+}
+
+.star-rating-1  { background: #ff2a2a; opacity: 0.6; filter: blur(0.5px); }
+.star-rating-2  { background: #ff527f; opacity: 0.63; filter: blur(0.6px); }
+.star-rating-3  { background: #ff7db2; opacity: 0.66; filter: blur(0.7px); }
+.star-rating-4  { background: #d37aff; opacity: 0.7; filter: blur(0.9px); }
+.star-rating-5  { background: #9b7fff; opacity: 0.73; filter: blur(1px); }
+.star-rating-6  { background: #5f79ff; opacity: 0.76; filter: blur(1.1px); }
+.star-rating-7  { background: #4c9bff; opacity: 0.8; filter: blur(1.2px); }
+.star-rating-8  { background: #4ccfff; opacity: 0.85; filter: blur(1.3px); }
+.star-rating-9  { background: #8fefff; opacity: 0.9; filter: blur(1.5px); }
+.star-rating-10 { background: #ffffff; opacity: 1; filter: blur(1.7px); }
+
+@keyframes twinkle {
+  0%,100% { opacity: 0.9; filter: brightness(1.2); }
+  25% { opacity: 0.6; filter: brightness(1); }
+  50% { opacity: 1; filter: brightness(1.4); }
+  75% { opacity: 0.7; filter: brightness(0.9); }
+}
+
+@keyframes float {
+  0%,100% { transform: translate(0,0) scale(1); }
+  25% { transform: translate(8px,-6px) scale(1.1); }
+  50% { transform: translate(-5px,8px) scale(0.95); }
+  75% { transform: translate(6px,4px) scale(1.05); }
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+  nav { flex-wrap: wrap; padding: 1rem; gap: 1rem; }
+  nav h1 { font-size: 1.5rem; }
+  nav .search-container input[type="search"] { width: 180px; }
+  nav select, #sortRatingsBtn { font-size: 0.85rem; padding: 0.45rem 0.7rem; margin-left: 0.5rem; }
+  .container { grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 15px; padding: 15px; }
+  .ai-card { padding: 15px; }
+  .ai-card h3 { font-size: 1rem; }
+  .ai-card-description { font-size: 0.8rem; }
+}
+
+/* Phones (max-width: 767px) */
+@media (max-width: 767px) {
+  nav { flex-direction: column; align-items: flex-start; gap: 0.8rem; padding: 0.8rem 1rem; }
+  nav h1 { font-size: 1.3rem; }
+  nav .search-container input[type="search"] { width: 100%; padding: 0.5rem 2rem 0.5rem 1rem; }
+  nav > div { width: 100%; justify-content: space-between; margin-left: 0; flex-wrap: wrap; }
+  nav select, #sortRatingsBtn { width: 48%; font-size: 0.8rem; margin: 0.3rem 0; }
+  .container { grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap: 12px; padding: 12px; }
+  .ai-card { padding: 12px; }
+  .ai-card h3 { font-size: 0.95rem; }
+  .ai-card-description { font-size: 0.75rem; }
+
+  /* Keep stars visible on phones, scale down slightly */
+  .orbit-container {
+    transform: scale(0.6);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+}
+
+/* Tiny phones (max-width: 480px) */
+@media (max-width: 480px) {
+  nav h1 { font-size: 1.1rem; }
+  nav .search-container input[type="search"] { font-size: 0.85rem; }
+  .ai-card h3 { font-size: 0.9rem; }
+  .ai-card-description { font-size: 0.7rem; }
+  .orbit-container { transform: scale(0.5); opacity: 0.6; }
+}
+
+/* ===== NAV TOGGLE BUTTON ===== */
+#toggleNavBtn {
+  position: fixed;
+  top: 1%;
+  right: 1%;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #1e90ff, #ff69b4);
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 110; /* above nav */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
+}
+
+#toggleNavBtn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 18px rgba(30,144,255,0.6), 0 0 10px rgba(255,105,180,0.4);
+}
+</style>
+</head>
+<body>
+<!-- Toggle Button to hide/show nav -->
+<button id="toggleNavBtn" title="Hide/Show Panel">≡</button>
+<!-- ===== NAVBAR ===== -->
+<nav>
+  <h1 class="logo" onclick="location.reload(true)">
+    <!-- Inline SVG Logo -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+      <defs>
+        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#1E90FF"/>
+          <stop offset="100%" stop-color="#00CED1"/>
+        </linearGradient>
+      </defs>
+      <circle cx="16" cy="16" r="15" fill="url(#grad)"/>
+      <text x="16" y="20" font-family="sans-serif" font-size="12" font-weight="bold" fill="white" text-anchor="middle">AI</text>
+    </svg>
+    <span>AI Hub</span>
+  </h1>
+
+  <!-- Search + Filters -->
+  <div class="filters-container">
+<div class="search-container">
+  <input type="search" required placeholder=" " id="searchInput" />
+  <label>Search AI...</label>
+  <span class="icon">⌕</span>
+  <span class="scan"></span>
+</div>
+  <select id="categorySelect">
+    <option value="All">All Categories</option>
+  </select>
+  <select id="pricingSelect">
+    <option value="All">All Pricing</option>
+    <option value="free">Free</option>
+    <option value="free-trial">Free Trial</option>
+    <option value="paid">Paid</option>
+  </select>
+  <select id="ratingSelect">
+    <option value="All">All Ratings</option>
+    <option value="1">1 Star</option>
+    <option value="2">2 Stars</option>
+    <option value="3">3 Stars</option>
+    <option value="4">4 Stars</option>
+    <option value="5">5 Stars</option>
+    <option value="6">6 Stars</option>
+    <option value="7">7 Stars</option>
+    <option value="8">8 Stars</option>
+    <option value="9">9 Stars</option>
+    <option value="10">10 Stars</option>
+  </select>
+  <button id="sortRatingsBtn">Sort by Ratings ↓</button>
+</div>
+</nav>
+
+<div class="container" id="aiContainer"></div>
+<script>
+    const aiList = [
+  /* ===== CHATBOTS ===== */
+  {
+    name: "ChatGPT",
+    url: "https://openai.com/chatgpt/",
+    logo: "🤖",
+    stars: 10,
+    category: "Chatbot",
+    pricing: "free-trial",
+    description: "ChatGPT is a top-tier AI assistant that feels polished and flexible. In the Chatbot category, it earns a perfect 10/10, and its free-trial access makes it easy to test before paying."
+  },
+  {
+    name: "Claude",
+    url: "https://www.anthropic.com/claude",
+    logo: "🧠",
+    stars: 9,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Claude is a sharp, thoughtful assistant that handles long prompts and structured work really well. It sits in the Chatbot category, scores a strong 9/10, and is available for free use."
+  },
+  {
+    name: "Gemini",
+    url: "https://gemini.google.com/",
+    logo: "✨",
+    stars: 8,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Gemini is a capable all-round assistant with solid multimodal skills and everyday usefulness. In the Chatbot category, it lands at a very good 8/10 and stays free to use."
+  },
+  {
+    name: "Microsoft Copilot",
+    url: "https://copilot.microsoft.com/",
+    logo: "🔍",
+    stars: 7,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Microsoft Copilot is a practical assistant for quick answers, summaries, and general help. It belongs in the Chatbot category, holds a good 7/10, and is free to access."
+  },
+  {
+    name: "Grok",
+    url: "https://grok.x.ai/",
+    logo: "🚀",
+    stars: 7,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Grok is a direct, fast-moving chatbot built for current conversations and a punchier style. In the Chatbot category, it earns a good 7/10 and is free to use."
+  },
+  {
+    name: "Perplexity",
+    url: "https://www.perplexity.ai/",
+    logo: "🔎",
+    stars: 8,
+    category: "Research",
+    pricing: "free",
+    description: "Perplexity is a research-focused assistant that mixes search with AI responses in a useful way. In the Research category, it scores a strong 8/10 and is free to use."
+  },
+  {
+    name: "Meta AI",
+    url: "https://ai.meta.com/",
+    logo: "🧿",
+    stars: 6,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Meta AI is a decent assistant for quick answers and light content generation inside Meta’s ecosystem. It belongs in the Chatbot category, sits at 6/10, and is free."
+  },
+  {
+    name: "DeepSeek",
+    url: "https://www.deepseek.com/",
+    logo: "🧬",
+    stars: 8,
+    category: "Chatbot",
+    pricing: "free",
+    description: "DeepSeek is a strong reasoning assistant that punches above its weight on coding and logic. In the Chatbot category, it rates 8/10 and is free to use."
+  },
+  {
+    name: "Pi AI",
+    url: "https://pi.ai/",
+    logo: "🧘",
+    stars: 5,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Pi AI is a friendly conversational assistant with a softer, more supportive tone. It’s in the Chatbot category, lands at 5/10, and is free."
+  },
+  {
+    name: "Poe",
+    url: "https://poe.com/",
+    logo: "🦉",
+    stars: 7,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Poe is a platform for trying multiple AI models from one place without much friction. It belongs in the Chatbot category, scores 7/10, and is free to use."
+  },
+  {
+    name: "Character.AI",
+    url: "https://character.ai/",
+    logo: "🎭",
+    stars: 7,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Character.AI is built for personality-driven chats and creative character interaction. In the Chatbot category, it earns a good 7/10 and is free."
+  },
+  {
+    name: "Replika",
+    url: "https://replika.ai/",
+    logo: "🤝",
+    stars: 4,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Replika is a companion-style chatbot that leans more toward casual conversation than serious work. It sits in the Chatbot category, gets a 4/10, and is free."
+  },
+  {
+    name: "YouChat",
+    url: "https://you.com/",
+    logo: "💬",
+    stars: 6,
+    category: "Chatbot",
+    pricing: "free",
+    description: "YouChat is a search-connected assistant that answers questions in a straightforward way. It belongs in the Chatbot category, scores 6/10, and is free."
+  },
+  {
+    name: "Kimi AI",
+    url: "https://kimi.moonshot.cn/",
+    logo: "🌙",
+    stars: 7,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Kimi AI is especially useful when long documents or long context are involved. In the Chatbot category, it earns a solid 7/10 and is free to use."
+  },
+  {
+    name: "Doubao",
+    url: "https://www.doubao.com/",
+    logo: "🧃",
+    stars: 6,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Doubao is a general chatbot with content generation and everyday utility features. It sits in the Chatbot category, scores 6/10, and is free."
+  },
+  {
+    name: "Janitor AI",
+    url: "https://janitorai.com/",
+    logo: "🧹",
+    stars: 5,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Janitor AI is more about custom characters and roleplay-style interaction than heavy productivity. It belongs in the Chatbot category, lands at 5/10, and is free."
+  },
+  {
+    name: "Nano GPT",
+    url: "https://www.nanogpt.com/",
+    logo: "🧠",
+    stars: 7,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Nano GPT is a nimble chatbot that keeps things quick and lightweight. In the Chatbot category, it scores 7/10 and is free to use."
+  },
+  {
+    name: "Le Chat",
+    url: "https://chat.mistral.ai/",
+    logo: "🌊",
+    stars: 6,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Le Chat is Mistral’s conversational assistant for general help and exploration. It belongs in the Chatbot category, lands at 6/10, and is free."
+  },
+  {
+    name: "Open Assistant",
+    url: "https://open-assistant.io/",
+    logo: "🛠️",
+    stars: 2,
+    category: "Chatbot",
+    pricing: "free",
+    description: "Open Assistant is an open community project that feels rougher than the top assistants. In the Chatbot category, it gets a low 2/10 and is free."
+  },
+
+  /* ===== IMAGE ===== */
+  {
+    name: "MidJourney",
+    url: "https://www.midjourney.com/",
+    logo: "🌌",
+    stars: 10,
+    category: "Image",
+    pricing: "paid",
+    description: "MidJourney is a standout image generator with strong artistic quality and detail. In the Image category, it earns a perfect 10/10 and is a paid tool."
+  },
+  {
+    name: "DALL·E",
+    url: "https://openai.com/dall-e/",
+    logo: "🎨",
+    stars: 9,
+    category: "Image",
+    pricing: "paid",
+    description: "DALL·E is a polished text-to-image model with strong creative output and clean results. It sits in the Image category, scores 9/10, and is paid."
+  },
+  {
+    name: "Stable Diffusion",
+    url: "https://stability.ai/",
+    logo: "⚡",
+    stars: 8,
+    category: "Image",
+    pricing: "free",
+    description: "Stable Diffusion is a flexible open model with a huge community and lots of customization. In the Image category, it gets 8/10 and is free."
+  },
+  {
+    name: "Leonardo AI",
+    url: "https://leonardo.ai/",
+    logo: "🎭",
+    stars: 7,
+    category: "Image",
+    pricing: "free",
+    description: "Leonardo AI is a strong choice for game art, concept visuals, and asset-style generation. It belongs in the Image category, scores 7/10, and is free."
+  },
+  {
+    name: "Ideogram",
+    url: "https://ideogram.ai/",
+    logo: "🔤",
+    stars: 8,
+    category: "Image",
+    pricing: "free",
+    description: "Ideogram is especially good when readable text inside images matters. In the Image category, it earns 8/10 and is free."
+  },
+  {
+    name: "NightCafe",
+    url: "https://nightcafe.studio/",
+    logo: "🌙",
+    stars: 6,
+    category: "Image",
+    pricing: "free",
+    description: "NightCafe is a community-oriented image generator with plenty of style variety. It sits in the Image category, gets 6/10, and is free."
+  },
+  {
+    name: "Playground AI",
+    url: "https://playgroundai.com/",
+    logo: "🎠",
+    stars: 6,
+    category: "Image",
+    pricing: "free",
+    description: "Playground AI is a beginner-friendly image tool that keeps creation simple. In the Image category, it scores 6/10 and is free."
+  },
+  {
+    name: "Krea AI",
+    url: "https://www.krea.ai/",
+    logo: "🖌️",
+    stars: 6,
+    category: "Image",
+    pricing: "free",
+    description: "Krea AI is useful for fast visual iteration and quick creative ideas. It belongs in the Image category, lands at 6/10, and is free."
+  },
+  {
+    name: "Recraft",
+    url: "https://www.recraft.ai/",
+    logo: "🧩",
+    stars: 5,
+    category: "Image",
+    pricing: "free",
+    description: "Recraft leans toward vector-style design and graphic-friendly output. In the Image category, it scores 5/10 and is free."
+  },
+  {
+    name: "Clipdrop",
+    url: "https://clipdrop.co/",
+    logo: "📸",
+    stars: 7,
+    category: "Image",
+    pricing: "free",
+    description: "Clipdrop is a handy toolkit for cleanup, enhancement, and background removal. It sits in the Image category, gets 7/10, and is free."
+  },
+  {
+    name: "Remove.bg",
+    url: "https://remove.bg/",
+    logo: "🪄",
+    stars: 8,
+    category: "Image",
+    pricing: "free",
+    description: "Remove.bg does one job very well: removing backgrounds fast and cleanly. In the Image category, it earns 8/10 and is free."
+  },
+  {
+    name: "Cleanup.pictures",
+    url: "https://cleanup.pictures/",
+    logo: "🧹",
+    stars: 7,
+    category: "Image",
+    pricing: "free",
+    description: "Cleanup.pictures is useful when you need to erase unwanted objects from photos. It belongs in the Image category, scores 7/10, and is free."
+  },
+  {
+    name: "DreamStudio",
+    url: "https://beta.dreamstudio.ai/",
+    logo: "🌈",
+    stars: 7,
+    category: "Image",
+    pricing: "free-trial",
+    description: "DreamStudio is the official Stable Diffusion interface for flexible image creation. In the Image category, it gets 7/10 and offers free-trial access."
+  },
+  {
+    name: "RunDiffusion",
+    url: "https://rundiffusion.com/",
+    logo: "⚡",
+    stars: 6,
+    category: "Image",
+    pricing: "free",
+    description: "RunDiffusion gives you an online setup for generating art with Stable Diffusion models. It sits in the Image category, scores 6/10, and is free."
+  },
+  {
+    name: "Hotpot AI",
+    url: "https://hotpot.ai/",
+    logo: "🔥",
+    stars: 5,
+    category: "Image",
+    pricing: "free",
+    description: "Hotpot AI is a practical image and design helper for casual editing and restoration. In the Image category, it earns 5/10 and is free."
+  },
+  {
+    name: "Photosonic",
+    url: "https://photosonic.writesonic.com/",
+    logo: "🖼️",
+    stars: 6,
+    category: "Image",
+    pricing: "free-trial",
+    description: "Photosonic focuses on quick text-to-image generation for concepts and marketing visuals. It belongs in the Image category, scores 6/10, and offers free-trial access."
+  },
+  {
+    name: "Artbreeder",
+    url: "https://www.artbreeder.com/",
+    logo: "🧬",
+    stars: 4,
+    category: "Image",
+    pricing: "free",
+    description: "Artbreeder is more about blending and evolving images than producing top-tier results. In the Image category, it gets a 4/10 and is free."
+  },
+  {
+    name: "DeepAI Image Generator",
+    url: "https://deepai.org/machine-learning-model/text2img",
+    logo: "🎨",
+    stars: 1,
+    category: "Image",
+    pricing: "free",
+    description: "DeepAI Image Generator is very basic and feels dated compared with newer tools. It sits in the Image category, gets a 1/10, and is free."
+  },
+  {
+    name: "Craiyon",
+    url: "https://www.craiyon.com/",
+    logo: "🖼️",
+    stars: 2,
+    category: "Image",
+    pricing: "free",
+    description: "Craiyon is a rough, low-end image generator that works for simple experiments only. In the Image category, it scores 2/10 and is free."
+  },
+  {
+    name: "Fotor AI",
+    url: "https://www.fotor.com/features/ai-image-generator/",
+    logo: "🖌️",
+    stars: 5,
+    category: "Image",
+    pricing: "free",
+    description: "Fotor AI mixes image generation with editing features in a simple package. It belongs in the Image category, lands at 5/10, and is free."
+  },
+  {
+    name: "Nano Banana",
+    url: "https://www.nano-banana.com/",
+    logo: "🍌",
+    stars: 5,
+    category: "Image",
+    pricing: "pay-per-use",
+    description: "Nano Banana is a practical image editor for product shots and quick visual cleanup. In the Image category, it sits at 5/10 and uses pay-per-use pricing."
+  },
+
+  /* ===== VIDEO ===== */
+  {
+    name: "Runway",
+    url: "https://runwayml.com/",
+    logo: "🎬",
+    stars: 9,
+    category: "Video",
+    pricing: "free-trial",
+    description: "Runway is a serious video creation platform with strong generation and editing tools. In the Video category, it scores 9/10 and offers a free trial."
+  },
+  {
+    name: "Sora",
+    url: "https://sora.openai.com/",
+    logo: "🌊",
+    stars: 9,
+    category: "Video",
+    pricing: "paid",
+    description: "Sora is a high-end text-to-video tool with impressive realism and motion quality. It belongs in the Video category, gets 9/10, and is paid."
+  },
+  {
+    name: "Pika",
+    url: "https://pika.art/",
+    logo: "🎞️",
+    stars: 6,
+    category: "Video",
+    pricing: "free-trial",
+    description: "Pika is a simple way to make short AI videos and motion ideas. In the Video category, it scores 6/10 and offers a free trial."
+  },
+  {
+    name: "Synthesia",
+    url: "https://www.synthesia.io/",
+    logo: "👤",
+    stars: 7,
+    category: "Video",
+    pricing: "paid",
+    description: "Synthesia is best known for avatar-led training and presentation videos. It sits in the Video category, gets 7/10, and is paid."
+  },
+  {
+    name: "HeyGen",
+    url: "https://www.heygen.com/",
+    logo: "🧑",
+    stars: 7,
+    category: "Video",
+    pricing: "paid",
+    description: "HeyGen focuses on avatar videos and fast automated video production. In the Video category, it earns 7/10 and is paid."
+  },
+  {
+    name: "CapCut AI",
+    url: "https://www.capcut.com/",
+    logo: "🎞️",
+    stars: 7,
+    category: "Video",
+    pricing: "free",
+    description: "CapCut AI adds editing automation, subtitles, and quick social video tools. It belongs in the Video category, scores 7/10, and is free."
+  },
+  {
+    name: "Lumen5",
+    url: "https://lumen5.com/",
+    logo: "🎬",
+    stars: 6,
+    category: "Video",
+    pricing: "free-trial",
+    description: "Lumen5 is built for turning articles and scripts into short promotional videos. In the Video category, it gets 6/10 and offers a free trial."
+  },
+  {
+    name: "Wisecut",
+    url: "https://www.wisecut.video/",
+    logo: "✂️",
+    stars: 6,
+    category: "Video",
+    pricing: "free-trial",
+    description: "Wisecut automates silence removal, captions, and basic editing tasks. It sits in the Video category, scores 6/10, and offers a free trial."
+  },
+  {
+    name: "Veed.io",
+    url: "https://www.veed.io/ai",
+    logo: "🎥",
+    stars: 7,
+    category: "Video",
+    pricing: "free-trial",
+    description: "Veed.io is a practical AI-assisted editor for subtitles, transcription, and fast publishing. In the Video category, it earns 7/10 and offers a free trial."
+  },
+
+  /* ===== AUDIO / VOICE ===== */
+  {
+    name: "Suno AI",
+    url: "https://suno.ai/",
+    logo: "🎶",
+    stars: 10,
+    category: "Audio",
+    pricing: "free",
+    description: "Suno AI is excellent at turning prompts into full songs with vocals and instruments. In the Audio category, it earns a perfect 10/10 and is free."
+  },
+  {
+    name: "Udio",
+    url: "https://udio.com/",
+    logo: "🎧",
+    stars: 7,
+    category: "Audio",
+    pricing: "free",
+    description: "Udio is a solid music generation tool for making songs and compositions from prompts. It belongs in the Audio category, scores 7/10, and is free."
+  },
+  {
+    name: "ElevenLabs",
+    url: "https://elevenlabs.io/",
+    logo: "🔊",
+    stars: 9,
+    category: "Voice",
+    pricing: "free",
+    description: "ElevenLabs is one of the best voice tools for lifelike narration and voiceovers. In the Voice category, it gets 9/10 and is free."
+  },
+  {
+    name: "Murf",
+    url: "https://murf.ai/",
+    logo: "🎙️",
+    stars: 8,
+    category: "Voice",
+    pricing: "free-trial",
+    description: "Murf is a strong voiceover tool with natural delivery and studio-style output. It sits in the Voice category, scores 8/10, and offers a free trial."
+  },
+  {
+    name: "Descript",
+    url: "https://www.descript.com/",
+    logo: "📝",
+    stars: 8,
+    category: "Voice",
+    pricing: "free-trial",
+    description: "Descript is great for editing audio, transcribing speech, and handling podcast workflows. In the Voice category, it earns 8/10 and offers a free trial."
+  },
+  {
+    name: "Resemble AI",
+    url: "https://www.resemble.ai/",
+    logo: "🗣️",
+    stars: 7,
+    category: "Voice",
+    pricing: "paid",
+    description: "Resemble AI focuses on voice cloning and expressive text-to-speech. It belongs in the Voice category, scores 7/10, and is paid."
+  },
+  {
+    name: "Play.ht",
+    url: "https://play.ht/",
+    logo: "🔊",
+    stars: 8,
+    category: "Voice",
+    pricing: "free-trial",
+    description: "Play.ht is a strong text-to-speech tool with natural voices and multilingual support. In the Voice category, it gets 8/10 and offers a free trial."
+  },
+  {
+    name: "Replica Studios",
+    url: "https://replicastudios.com/",
+    logo: "🗣️",
+    stars: 7,
+    category: "Voice",
+    pricing: "free-trial",
+    description: "Replica Studios is built for realistic voice performances in games and media. It sits in the Voice category, scores 7/10, and offers a free trial."
+  },
+  {
+    name: "Lovo AI",
+    url: "https://www.lovo.ai/",
+    logo: "🎙️",
+    stars: 7,
+    category: "Voice",
+    pricing: "free-trial",
+    description: "Lovo AI is a useful voice generation tool for narration, commercials, and audiobooks. In the Voice category, it earns 7/10 and offers a free trial."
+  },
+
+  /* ===== CODE ===== */
+  {
+    name: "GitHub Copilot",
+    url: "https://github.com/features/copilot",
+    logo: "💻",
+    stars: 9,
+    category: "Code",
+    pricing: "paid",
+    description: "GitHub Copilot is a powerful coding assistant that suggests code as you type. In the Code category, it scores 9/10 and is paid."
+  },
+  {
+    name: "Cursor",
+    url: "https://cursor.sh/",
+    logo: "🧑‍💻",
+    stars: 9,
+    category: "Code",
+    pricing: "free-trial",
+    description: "Cursor is an AI-first editor that makes coding, refactoring, and debugging feel smoother. It belongs in the Code category, gets 9/10, and offers a free trial."
+  },
+  {
+    name: "Codeium",
+    url: "https://codeium.com/",
+    logo: "⚙️",
+    stars: 7,
+    category: "Code",
+    pricing: "free",
+    description: "Codeium is a free coding assistant with autocomplete and chat help. In the Code category, it earns 7/10 and is free."
+  },
+  {
+    name: "Tabnine",
+    url: "https://www.tabnine.com/",
+    logo: "⌨️",
+    stars: 7,
+    category: "Code",
+    pricing: "free",
+    description: "Tabnine is a practical code completion assistant for many languages and editors. It sits in the Code category, scores 7/10, and is free."
+  },
+  {
+    name: "Amazon CodeWhisperer",
+    url: "https://aws.amazon.com/codewhisperer/",
+    logo: "🛠️",
+    stars: 7,
+    category: "Code",
+    pricing: "free-trial",
+    description: "Amazon CodeWhisperer helps with code suggestions and secure coding workflows. In the Code category, it gets 7/10 and offers a free trial."
+  },
+  {
+    name: "Codium AI",
+    url: "https://www.codium.ai/",
+    logo: "⚙️",
+    stars: 5,
+    category: "Code",
+    pricing: "free",
+    description: "Codium AI is useful for testing, review, and repetitive coding support. It belongs in the Code category, lands at 5/10, and is free."
+  },
+  {
+    name: "Mutable AI",
+    url: "https://mutable.ai/",
+    logo: "🧩",
+    stars: 4,
+    category: "Code",
+    pricing: "free-trial",
+    description: "Mutable AI is more of a helper for boilerplate and collaboration than a standout coder. In the Code category, it scores 4/10 and offers a free trial."
+  },
+  {
+    name: "CodePal",
+    url: "https://codepal.ai/",
+    logo: "🔧",
+    stars: 3,
+    category: "Code",
+    pricing: "free",
+    description: "CodePal is a basic coding helper that feels limited compared with stronger tools. It sits in the Code category, gets 3/10, and is free."
+  },
+
+  /* ===== PRODUCTIVITY ===== */
+  {
+    name: "Notion AI",
+    url: "https://www.notion.so/product/ai",
+    logo: "📓",
+    stars: 7,
+    category: "Productivity",
+    pricing: "paid",
+    description: "Notion AI helps write, summarize, and organize work inside Notion. In the Productivity category, it scores 7/10 and is paid."
+  },
+  {
+    name: "Otter AI",
+    url: "https://otter.ai/",
+    logo: "🦦",
+    stars: 7,
+    category: "Productivity",
+    pricing: "free",
+    description: "Otter AI is built for live transcription and fast meeting summaries. It belongs in the Productivity category, gets 7/10, and is free."
+  },
+  {
+    name: "Fireflies AI",
+    url: "https://fireflies.ai/",
+    logo: "🔥",
+    stars: 7,
+    category: "Productivity",
+    pricing: "free",
+    description: "Fireflies AI records meetings and turns them into clean summaries and action items. In the Productivity category, it earns 7/10 and is free."
+  },
+  {
+    name: "Cogram",
+    url: "https://www.cogram.com/",
+    logo: "💻",
+    stars: 6,
+    category: "Productivity",
+    pricing: "free-trial",
+    description: "Cogram is handy for note-taking, documentation, and technical meeting support. It sits in the Productivity category, scores 6/10, and offers a free trial."
+  },
+  {
+    name: "Laxis",
+    url: "https://www.laxis.ai/",
+    logo: "🗒️",
+    stars: 6,
+    category: "Productivity",
+    pricing: "free-trial",
+    description: "Laxis turns meetings into summaries and action items with decent reliability. In the Productivity category, it gets 6/10 and offers a free trial."
+  },
+  {
+    name: "Mem AI",
+    url: "https://mem.ai/",
+    logo: "📌",
+    stars: 6,
+    category: "Productivity",
+    pricing: "free-trial",
+    description: "Mem AI focuses on organizing notes and making knowledge easier to retrieve. It belongs in the Productivity category, scores 6/10, and offers a free trial."
+  },
+
+  /* ===== DESIGN ===== */
+  {
+    name: "Canva AI",
+    url: "https://www.canva.com/",
+    logo: "🎨",
+    stars: 8,
+    category: "Design",
+    pricing: "free",
+    description: "Canva AI adds useful generative tools to an already easy design platform. In the Design category, it scores 8/10 and is free."
+  },
+  {
+    name: "Adobe Firefly",
+    url: "https://www.adobe.com/products/firefly.html",
+    logo: "🔥",
+    stars: 8,
+    category: "Design",
+    pricing: "paid",
+    description: "Adobe Firefly brings AI generation into Adobe’s creative workflow in a polished way. It sits in the Design category, gets 8/10, and is paid."
+  },
+
+  /* ===== WRITING ===== */
+  {
+    name: "Peppertype.ai",
+    url: "https://www.peppertype.ai/",
+    logo: "✍️",
+    stars: 5,
+    category: "Writing",
+    pricing: "free-trial",
+    description: "Peppertype.ai can draft content and marketing copy, but it is not especially strong. In the Writing category, it scores 5/10 and offers a free trial."
+  },
+  {
+    name: "Simplified AI",
+    url: "https://simplified.com/ai",
+    logo: "📄",
+    stars: 6,
+    category: "Writing",
+    pricing: "free-trial",
+    description: "Simplified AI helps with writing, design, and social content in one place. It belongs in the Writing category, gets 6/10, and offers a free trial."
+  },
+  {
+    name: "Anyword",
+    url: "https://anyword.com/",
+    logo: "📃",
+    stars: 6,
+    category: "Writing",
+    pricing: "free-trial",
+    description: "Anyword is aimed at marketing copy and performance-focused writing. In the Writing category, it scores 6/10 and offers a free trial."
+  },
+  {
+    name: "Scalenut",
+    url: "https://www.scalenut.com/",
+    logo: "📝",
+    stars: 6,
+    category: "Writing",
+    pricing: "free-trial",
+    description: "Scalenut blends AI writing with SEO-oriented content creation. It sits in the Writing category, gets 6/10, and offers a free trial."
+  }
+];
+
+// --- DOM Elements ---
+const container = document.getElementById("aiContainer");
+const searchInput = document.getElementById("searchInput");
+const categorySelect = document.getElementById("categorySelect");
+const pricingSelect = document.getElementById("pricingSelect");
+const ratingSelect = document.getElementById("ratingSelect");
+const sortRatingsBtn = document.getElementById("sortRatingsBtn");
+
+// --- Populate Category Dropdown ---
+const categories = Array.from(new Set(aiList.map(ai => ai.category))).sort();
+categories.forEach(cat => {
+  const option = document.createElement("option");
+  option.value = cat;
+  option.textContent = cat;
+  categorySelect.appendChild(option);
+});
+
+// --- Sorting Toggle ---
+let sortDescending = true;
+sortRatingsBtn.addEventListener("click", () => {
+  sortDescending = !sortDescending;
+  sortRatingsBtn.textContent = sortDescending ? "Sort by Ratings ↓" : "Sort by Ratings ↑";
+  applyFilters();
+});
+
+// --- Apply Filters Function ---
+function applyFilters() {
+  const searchText = searchInput.value.toLowerCase();
+  const selectedCategory = categorySelect.value;
+  const selectedPricing = pricingSelect.value;
+  const selectedRating = ratingSelect.value;
+
+  container.innerHTML = "";
+
+  let filteredAIs = aiList.filter(ai => {
+    const matchesSearch = ai.name.toLowerCase().includes(searchText);
+    const matchesCategory = selectedCategory === "All" || ai.category === selectedCategory;
+    const matchesPricing = selectedPricing === "All" || ai.pricing === selectedPricing;
+    const matchesRating = selectedRating === "All" || ai.stars === parseInt(selectedRating);
+    return matchesSearch && matchesCategory && matchesPricing && matchesRating;
+  });
+
+  // --- Sort by Ratings ---
+  filteredAIs.sort((a, b) => sortDescending ? b.stars - a.stars : a.stars - b.stars);
+
+  filteredAIs.forEach(ai => {
+    const card = document.createElement("div");
+    card.className = "ai-card";
+
+    const pricingLabel = ai.pricing === "free" ? "FREE" : ai.pricing === "free-trial" ? "TRIAL" : "PAID";
+    const pricingClass = `pricing-${ai.pricing}`;
+
+    card.innerHTML = `
+      <div class="pricing-badge ${pricingClass}">${pricingLabel}</div>
+      <div style="font-size: 3rem; margin: 0.5rem 0;">${ai.logo}</div>
+      <h3>${ai.name}</h3>
+      <p class="ai-card-description">${ai.description}</p>
+      <div class="orbit-container"></div>
+    `;
+
+    const orbitContainer = card.querySelector(".orbit-container");
+
+    for (let i = 0; i < ai.stars; i++) {
+      const star = document.createElement("div");
+      star.className = "star";
+      star.classList.add(`star-rating-${ai.stars}`);
+
+      const randomX = Math.random() * 80 + 10;
+      const randomY = Math.random() * 80 + 10;
+
+      star.style.left = `${randomX}%`;
+      star.style.top = `${randomY}%`;
+
+      const starSize = 8 + Math.random() * 6;
+      star.style.width = `${starSize}px`;
+      star.style.height = `${starSize}px`;
+      star.style.transform = "translate(-50%, -50%)";
+
+      star.style.animationDuration = `${2 + Math.random() * 2}s, ${5 + Math.random() * 3}s`;
+      star.style.animationDelay = `${i * 0.3}s, ${-i * 0.5}s`;
+
+      orbitContainer.appendChild(star);
+    }
+
+    card.addEventListener("click", () => window.open(ai.url, "_blank"));
+    container.appendChild(card);
+  });
+}
+
+// --- Event Listeners ---
+searchInput.addEventListener("input", applyFilters);
+categorySelect.addEventListener("change", applyFilters);
+pricingSelect.addEventListener("change", applyFilters);
+ratingSelect.addEventListener("change", applyFilters);
+
+// --- Initial Render ---
+applyFilters();
+
+
+const toggleBtn = document.getElementById('toggleNavBtn');
+const nav = document.querySelector('nav');
+
+toggleBtn.addEventListener('click', () => {
+  if (nav.style.display === 'none') {
+    nav.style.display = 'flex';
+    toggleBtn.textContent = '≡'; // button icon when nav is visible
+  } else {
+    nav.style.display = 'none';
+    toggleBtn.textContent = '🡇'; // button icon when nav is hidden
+  }
+});
+</script>
+</body>
+</html>
